@@ -1,8 +1,6 @@
-const INPUT = [1721, 979, 366, 299, 675, 1456];
-
 // imperative style :)
 // O(n2)
-function findEntriesThatSum2020(input) {
+function findTwoEntriesThatSum2020(input) {
   let res1, res2;
   for (let i = 0; i < input.length; i++) {
     if (res1 && res2) break;
@@ -18,10 +16,44 @@ function findEntriesThatSum2020(input) {
       }
     }
   }
-  return {result: res1 * res2, res1, res2};
+  return { result: res1 * res2, res1, res2 };
 }
 
-console.log(findEntriesThatSum2020(INPUT));
+function findThreeEntriesThatSum2020(input) {
+  let res1, res2, res3;
+  input.sort(function (a, b) {
+    if (a < b) {
+      return -1;
+    } else if (a > b) {
+      return 1;
+    } else return 0;
+  });
+  for (let i = 0; i < input.length; i++) {
+    if (res1 && res2 && res3) break;
+    const num1 = input[i];
+    if (num1 >= 2020) {
+      break;
+    }
+    // console.log(num1);
+    for (let j = i + 1; j < input.length; j++) {
+      const num2 = input[j];
+      //   console.log(num2);
+      for (let k = j + 1; k < input.length; k++) {
+        if (num1 + num2 >= 2020) {
+          break;
+        }
+        const num3 = input[k];
+        if (num1 + num2 + num3 === 2020) {
+          res1 = num1;
+          res2 = num2;
+          res3 = num3;
+          break;
+        }
+      }
+    }
+  }
+  return { result: res1 * res2 * res3, res1, res2, res3 };
+}
 
 const realINPUT = [
   1768,
@@ -226,4 +258,5 @@ const realINPUT = [
   1705,
 ];
 
-console.log(findEntriesThatSum2020(realINPUT));
+console.log(findTwoEntriesThatSum2020(realINPUT));
+console.log(findThreeEntriesThatSum2020(realINPUT));
