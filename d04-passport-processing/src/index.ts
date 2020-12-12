@@ -1,5 +1,3 @@
-import { Interface } from "readline";
-
 const fs = require("fs");
 const path = require("path");
 
@@ -17,7 +15,6 @@ const readFile = (filename: string): string => {
     pid (Passport ID)
     cid (Country ID)
  */
-
 type passport = {
   [index: string]: string;
 };
@@ -28,7 +25,6 @@ const parsePassport: (
   parsedInput?: passport,
   parsedPassports?: passport[]
 ) => passport[] = (input, pos = 0, parsedInput = {}, parsedPassports = []) => {
-
   if (input.length === 0) {
     return parsedPassports as passport[];
   }
