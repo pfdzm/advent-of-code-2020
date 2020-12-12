@@ -1,0 +1,18 @@
+{
+  "name": "d04-passport-processing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.14.12",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.2"
+  }
+}
