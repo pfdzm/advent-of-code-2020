@@ -1,22 +1,40 @@
+import { Interface } from "readline";
+
 const fs = require("fs");
 const path = require("path");
 
 const readFile = (filename: string): string => {
   return fs.readFileSync(path.join(__dirname, filename)).toString();
 };
-const parsePassport: (...args: any[]) => {}[] = (
+
+/**
+    byr (Birth Year)
+    iyr (Issue Year)
+    eyr (Expiration Year)
+    hgt (Height)
+    hcl (Hair Color)
+    ecl (Eye Color)
+    pid (Passport ID)
+    cid (Country ID)
+ */
+
+type passport = {
+  [index: string]: string;
+};
+
+const parsePassport: (
   input: string[],
-  pos = 0,
-  parsedInput: { [key: string]: string } = {},
-  parsedPassports: {}[] = []
-) => {
+  pos?: number,
+  parsedInput?: passport,
+  parsedPassports?: passport[]
+) => passport[] = (input, pos = 0, parsedInput = {}, parsedPassports = []) => {
   const line = input[0];
   const prevPos = pos;
   const nextSpace = (pos: number) => line.indexOf(" ", pos);
   pos = nextSpace(pos) === -1 ? line.length : nextSpace(pos);
 
   if (input.length === 1) {
-    return parsedPassports;
+    return parsedPassports as passport[];
   }
 
   if (line === "") {
@@ -38,40 +56,26 @@ const parsePassport: (...args: any[]) => {}[] = (
   return parsePassport(input, pos, parsedInput, parsedPassports);
 };
 
-const validatePassports = (passports: { [key: string]: string }[]) => {
+const validatePassports = (passports: passport[]) => {
   return passports.map(validate);
 };
 
-/**
-    byr (Birth Year)
-    iyr (Issue Year)
-    eyr (Expiration Year)
-    hgt (Height)
-    hcl (Hair Color)
-    ecl (Eye Color)
-    pid (Passport ID)
-    cid (Country ID)
- */
-
-const validate = (passport: any): boolean => {
-  let D = 7;
-  let validKeys = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"];
+const validate = (passport: passport): boolean => {
+  let D = 0;
+  let validKeys = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
   for (const prop in passport) {
-    console.log(prop);
     const index = validKeys.indexOf(prop);
-    console.log(index);
-    if (index) {
+    if (index !== -1) {
       D++;
       validKeys = validKeys
         .slice(0, index)
-        .concat(validKeys.slice(index, validKeys.length));
+        .concat(validKeys.slice(index + 1, validKeys.length));
     }
   }
-  return 8 === D;
+  D++;
+  return 8===D;
 };
 
 const passports = readFile("example.txt").split("\n");
-
-console.log(parsePassport(passports));
 
 console.log(validatePassports(parsePassport(passports)));
