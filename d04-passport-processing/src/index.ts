@@ -15,31 +15,32 @@ const parsePassport: (...args: any[]) => {}[] = (
     value = "";
 
   // str.indexOf(searchValue [, fromIndex])
-  const nextSpace = line.indexOf(" ", pos) 
-  pos = nextSpace === -1 ? line.length : nextSpace
+  const prevPos = pos;
+  const nextSpace = (pos: number) => line.indexOf(" ", pos);
+  pos = nextSpace(pos) === -1 ? line.length : nextSpace(pos);
 
   if (input.length === 1) {
     return parsedPassports;
   }
 
-  if (line.length === 0) {
-    if (parsedInput) {
-      input = input.slice(1);
-      parsedPassports.push(parsedInput);
-      parsedInput = {};
-    }
+  // line = pos === line.length ? "" : line.substring(pos + 1);
+  if (line === "") {
+    parsedPassports.push(parsedInput);
+    parsedInput = {};
+  }
+
+  const keyValue = line.slice(prevPos, pos).split(":");
+  key = keyValue[0];
+  value = keyValue[1];
+  parsedInput[key] = value;
+
+  if (pos++ >= line.length) {
+    input = input.slice(1);
     line = input[0];
+    pos = 0;
   }
 
-  if (line[pos] === " " || pos === line.length) {
-    // const keyValue = line.slice(0, pos)
-    key = line.slice(0, pos).split(":")[0];
-    value = line.slice(0, pos).split(":")[1];
-    parsedInput[key] = value;
-    // line = pos === line.length ? "" : line.substring(pos + 1);
-  }
-
-  return parsePassport(input, line, ++pos, parsedInput, parsedPassports);
+  return parsePassport(input, line, pos, parsedInput, parsedPassports);
 };
 
 const validatePassports = (passports: { [key: string]: string }[]) => {
