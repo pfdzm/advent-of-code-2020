@@ -28,14 +28,15 @@ const parsePassport: (
   parsedInput?: passport,
   parsedPassports?: passport[]
 ) => passport[] = (input, pos = 0, parsedInput = {}, parsedPassports = []) => {
+
+  if (input.length === 0) {
+    return parsedPassports as passport[];
+  }
+
   const line = input[0];
   const prevPos = pos;
   const nextSpace = (pos: number) => line.indexOf(" ", pos);
   pos = nextSpace(pos) === -1 ? line.length : nextSpace(pos);
-
-  if (input.length === 1) {
-    return parsedPassports as passport[];
-  }
 
   if (line === "") {
     parsedPassports.push(parsedInput);
@@ -57,7 +58,9 @@ const parsePassport: (
 };
 
 const validatePassports = (passports: passport[]) => {
-  return passports.map(validate);
+  return passports
+    .map(validate)
+    .reduce((prevVal, currVal) => prevVal + (currVal ? 1 : 0), 0);
 };
 
 const validate = (passport: passport): boolean => {
@@ -73,9 +76,11 @@ const validate = (passport: passport): boolean => {
     }
   }
   D++;
-  return 8===D;
+  return 8 === D;
 };
 
-const passports = readFile("example.txt").split("\n");
+const exampleInput = readFile("example.txt").split("\n");
+const prodInput = readFile("input.txt").split("\n");
 
-console.log(validatePassports(parsePassport(passports)));
+console.log("example: \n", validatePassports(parsePassport(exampleInput)));
+console.log("prod: \n", validatePassports(parsePassport(prodInput)));
