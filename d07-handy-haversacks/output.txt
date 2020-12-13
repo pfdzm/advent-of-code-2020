@@ -1,0 +1,35 @@
+{
+  "light red": [
+    "bright white",
+    "muted yellow"
+  ],
+  "dark orange": [
+    "bright white",
+    "muted yellow"
+  ],
+  "bright white": [
+    "shiny gold"
+  ],
+  "muted yellow": [
+    "shiny gold",
+    "faded blue"
+  ],
+  "shiny gold": [
+    "dark olive",
+    "vibrant plum"
+  ],
+  "dark olive": [
+    "faded blue",
+    "dotted black"
+  ],
+  "vibrant plum": [
+    "faded blue",
+    "dotted black"
+  ],
+  "faded blue": [
+    "no other bags."
+  ],
+  "dotted black": [
+    "no other bags."
+  ]
+}
