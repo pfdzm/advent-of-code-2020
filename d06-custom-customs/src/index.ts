@@ -12,6 +12,25 @@ const writeOutput = (data: Record<string, string | number>[]) => {
   fs.writeFileSync(path.join(process.cwd(), 'output.txt'), outputStr, 'utf-8')
 }
 
+function reduceQuestions(questions: string[], people: number) {
+  let total = 0
+  const unique = questions.reduce((prev, curr) => {
+    if (prev[curr]) {
+      return { ...prev, [curr]: ++prev[curr] }
+    }
+    return { ...prev, [curr]: 1 }
+  }, {} as Record<string, number>)
+  for (const key in unique) {
+    if (Object.prototype.hasOwnProperty.call(unique, key)) {
+      const count = unique[key]
+      if (count === people) {
+        ++total
+      }
+    }
+  }
+  return total
+}
+
 function parseCustomsForm(
   input: string[],
   questions: string[] = [],
@@ -46,25 +65,6 @@ function parseCustomsForm2(
 ): number {
   if (input.length === 0) {
     return totalCount
-  }
-
-  function reduceQuestions(questions: string[], people: number) {
-    let total = 0
-    const unique = questions.reduce((prev, curr) => {
-      if (prev[curr]) {
-        return { ...prev, [curr]: ++prev[curr] }
-      }
-      return { ...prev, [curr]: 1 }
-    }, {} as Record<string, number>)
-    for (const key in unique) {
-      if (Object.prototype.hasOwnProperty.call(unique, key)) {
-        const count = unique[key]
-        if (count === people) {
-          ++total
-        }
-      }
-    }
-    return total
   }
 
   const line = input[0]
