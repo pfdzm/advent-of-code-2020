@@ -12,24 +12,6 @@ const writeOutput = (data: Record<string, string | number>[]) => {
   fs.writeFileSync(path.join(process.cwd(), 'output.txt'), outputStr, 'utf-8')
 }
 
-/**
-abc
-
-a
-b
-c
-
-ab
-ac
-
-a
-a
-a
-a
-
-b
-*/
-
 function parseCustomsForm(
   input: string[],
   questions: string[] = [],
@@ -56,8 +38,69 @@ function parseCustomsForm(
   return parseCustomsForm(input.slice(1), questions, totalCount)
 }
 
+function parseCustomsForm2(
+  input: string[],
+  questions: string[] = [],
+  totalCount: number = 0,
+  peopleInGroup: number = 0
+): number {
+  if (input.length === 0) {
+    return totalCount
+  }
+
+  function reduceQuestions(questions: string[], people: number) {
+    let total = 0
+    const unique = questions.reduce((prev, curr) => {
+      if (prev[curr]) {
+        return { ...prev, [curr]: ++prev[curr] }
+      }
+      return { ...prev, [curr]: 1 }
+    }, {} as Record<string, number>)
+    for (const key in unique) {
+      if (Object.prototype.hasOwnProperty.call(unique, key)) {
+        const count = unique[key]
+        if (count === people) {
+          ++total
+        }
+      }
+    }
+    return total
+  }
+
+  const line = input[0]
+  if (line.length === 0) {
+    totalCount += reduceQuestions(questions, peopleInGroup)
+    questions = []
+    peopleInGroup = 0
+    return parseCustomsForm2(
+      input.slice(1),
+      questions,
+      totalCount,
+      peopleInGroup
+    )
+  }
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i]
+    questions.push(char)
+  }
+
+  return parseCustomsForm2(
+    input.slice(1),
+    questions,
+    totalCount,
+    ++peopleInGroup
+  )
+}
+
 const example = parseCustomsForm(readFile('example.txt').split('\n'))
 const part1 = parseCustomsForm(readFile('input.txt').split('\n'))
 
-console.log('example', '--', example)
-console.log('Part 1', '--', part1)
+const example2 = parseCustomsForm2(readFile('example.txt').split('\n'))
+const part2 = parseCustomsForm2(readFile('input.txt').split('\n'))
+
+console.log('example part 1', '--', example)
+console.log('part 1', '--', part1)
+
+console.log('example part 2', '--', example2)
+console.log('part 2', '--', part2)
